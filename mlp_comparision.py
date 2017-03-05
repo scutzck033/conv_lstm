@@ -29,8 +29,6 @@ rawdata_train = pd.read_csv("4h per day(1h).csv",encoding='gbk')
 rawdata_train=rawdata_train[[2]] # open,close,highest,lowest
 
 
-
-
 data=rawdata_train.as_matrix()[0:160]
 
 temp_dataX= []

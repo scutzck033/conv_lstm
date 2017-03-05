@@ -45,7 +45,6 @@ def model_mlp_4241_test(rawdata):
 
     temp = 0.0
 
-
     for i in range(prediction.shape[0]):
         for j in range(prediction.shape[1]):
             temp = temp + abs(prediction[i][j] - dataY_Test[i][j]) / dataY_Test[i][j]
