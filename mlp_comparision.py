@@ -15,31 +15,23 @@ import h5py
 from keras.models import model_from_json
 
 
-# Convolution
-nb_row=3
-nb_col=1
-nb_filter = 64
-pool_size = 1
-
-# LSTM
-lstm_output_size = 64
-
 # Training
 batch_size = 32
-nb_epoch = 20
+nb_epoch = 2
 
 n_frames=4
-n_hours=24
+n_hours=4
 n_cols=1
 
 
 #load training raw data
-rawdata_train = pd.read_csv("EURUSD60_train.csv",encoding='gbk')
+rawdata_train = pd.read_csv("4h per day(1h).csv",encoding='gbk')
 rawdata_train=rawdata_train[[2]] # open,close,highest,lowest
 
 
 
-data=rawdata_train.as_matrix()
+
+data=rawdata_train.as_matrix()[0:160]
 
 temp_dataX= []
 temp_dataY= []

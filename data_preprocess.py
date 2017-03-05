@@ -4,7 +4,7 @@ import csv
 
 #write processed data
 def writeCSV(rawdata):
-    csvfile = file('4h per day(5min).csv', 'wb')#w meas write;b meas document
+    csvfile = file('4h per day(1h).csv', 'wb')#w meas write;b meas document
     writer = csv.writer(csvfile)
     writer.writerow(['date', 'time','open','max','min','close','volume','turnover'])#writerow writes one row
 
@@ -68,6 +68,6 @@ rawdata_train = pd.read_table("4h per day(1min).txt",encoding='gbk',delimiter='\
 
 
 rawdata_train=rawdata_train.as_matrix()
-dataProcessed(rawdata_train,5)#5min per unit changed to 1h per unit
+dataProcessed(rawdata_train,60)#5min per unit changed to 1h per unit
 
 

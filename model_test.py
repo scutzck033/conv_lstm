@@ -10,12 +10,13 @@ from keras.models import model_from_json
 
 def model_mlp_4241_test(rawdata):
     rawdata_test = rawdata[[2]]
-    dataTest = rawdata_test.as_matrix()[0:888]
+    dataTest = rawdata_test.as_matrix()[160:244]
+
     temp_dataX_Test = []
     temp_dataY_Test = []
 
     n_frames = 4
-    n_hours = 24
+    n_hours = 4
     n_cols = 1
 
     temp_dataX_Test = dataTest[0:(dataTest.shape[0] - n_hours)]
@@ -205,11 +206,11 @@ def model_4244_test(rawdata):
 
 
 #load testing raw data
-rawdata_test = pd.read_csv("EURUSD60_test.csv",encoding='gbk')
-model_4244_test(rawdata_test)
-model_4241_test(rawdata_test)
+rawdata_test = pd.read_csv("4h per day(1h).csv",encoding='gbk')
+# model_4244_test(rawdata_test)
+# model_4241_test(rawdata_test)
 model_mlp_4241_test(rawdata_test)
-model_merge_test(rawdata_test)
+# model_merge_test(rawdata_test)
 
 
 
