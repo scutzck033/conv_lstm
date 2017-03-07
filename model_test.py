@@ -8,6 +8,11 @@ import pandas as pd
 import h5py
 from keras.models import model_from_json
 
+#Normalization
+def MaxMinNormalization(x,Max,Min):
+    x = (x - Min) / (Max - Min);
+    return x;
+
 def model_mlp_4241_test(rawdata):
     rawdata_test = rawdata[[2]]
     dataTest = rawdata_test.as_matrix()[160:244]#[0:888]
@@ -36,6 +41,13 @@ def model_mlp_4241_test(rawdata):
     dataX_Test = np.reshape(dataX_Test, (np.array(dataX_Test).shape[0], -1))
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], -1))
 
+    # Normalization
+    maxV = np.max(dataY_Test)
+    minV = np.min(dataY_Test)
+    for i in range(np.array(dataY_Test).shape[0]):
+        for j in range(np.array(dataY_Test).shape[1]):
+            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+
     model = model_from_json(open('model_mlp_4241_architecture.json').read())
     model.load_weights('model_mlp_4241_weights.h5')
 
@@ -44,6 +56,9 @@ def model_mlp_4241_test(rawdata):
     print('Predict...')
 
     temp = 0.0
+    print (prediction)
+
+    print ('label...')
     print (dataY_Test)
 
     for i in range(prediction.shape[0]):
@@ -105,12 +120,12 @@ def model_merge_test(rawdata):
 
 def model_4241_test(rawdata):
     rawdata_test = rawdata[[2]]#get one column
-    dataTest = rawdata_test.as_matrix()[0:888]
+    dataTest = rawdata_test.as_matrix()[160:244]#[0:888]
     temp_dataX_Test = []
     temp_dataY_Test = []
 
     n_frames = 4
-    n_hours = 24
+    n_hours = 4
     n_cols = 1
 
     temp_dataX_Test=dataTest[0:(dataTest.shape[0]-n_hours)]
@@ -134,6 +149,13 @@ def model_4241_test(rawdata):
                 temp.append(temp_dataY_Test[i + j * n_hours])
             dataY_Test.append(temp)
 
+    # Normalization
+    maxV = np.max(dataY_Test)
+    minV = np.min(dataY_Test)
+    for i in range(np.array(dataY_Test).shape[0]):
+        for j in range(np.array(dataY_Test).shape[1]):
+            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+
     dataX_Test=np.reshape(dataX_Test,(np.array(dataX_Test).shape[0],n_frames,n_hours,n_cols,1))
     dataY_Test=np.reshape(dataY_Test,(np.array(dataY_Test).shape[0],n_frames,-1))
 
@@ -143,6 +165,9 @@ def model_4241_test(rawdata):
     print ('Score...')
     prediction=model.predict(dataX_Test,verbose=0)
     print ('Predict...')
+    # print (prediction.shape)
+    print ('label...')
+    # print (dataY_Test.shape)
 
     temp = 0.0
 
@@ -157,12 +182,12 @@ def model_4241_test(rawdata):
 
 def model_4244_test(rawdata):
     rawdata_test = rawdata[[2,3,4,5]]
-    dataTest = rawdata_test.as_matrix()[0:888]
+    dataTest = rawdata_test.as_matrix()[160:244]#[0:888]
     temp_dataX_Test = []
     temp_dataY_Test = []
 
     n_frames = 4
-    n_hours = 24
+    n_hours = 4
     n_cols = 4
 
     temp_dataX_Test = dataTest[0:(dataTest.shape[0] - n_hours)]
@@ -184,6 +209,13 @@ def model_4244_test(rawdata):
                 temp.append(temp_dataY_Test[i + j * n_hours])
             dataY_Test.append(temp)
 
+    # Normalization
+    maxV = np.max(dataY_Test)
+    minV = np.min(dataY_Test)
+    for i in range(np.array(dataY_Test).shape[0]):
+        for j in range(np.array(dataY_Test).shape[1]):
+            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+
     dataX_Test = np.reshape(dataX_Test, (np.array(dataX_Test).shape[0], n_frames, n_hours, n_cols, 1))
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], n_frames, -1))
 
@@ -195,6 +227,9 @@ def model_4244_test(rawdata):
     print('Predict...')
 
     temp = 0.0
+    print (prediction)
+    print ("label...")
+    print (dataY_Test)
 
     # conv_lstm
     for i in range(prediction.shape[0]):
@@ -202,6 +237,7 @@ def model_4244_test(rawdata):
             for k in range(prediction.shape[2]):
                 temp = temp + abs(prediction[i][j][k] - dataY_Test[i][j][k]) / dataY_Test[i][j][k]
     error = temp / (prediction.shape[0] * prediction.shape[1] * prediction.shape[2])
+    print (error)
     print("Model_4244 error: %.2f%%" % (error * 100))
 
 

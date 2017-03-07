@@ -23,6 +23,10 @@ n_frames=4
 n_hours=4
 n_cols=1
 
+#Normalization
+def MaxMinNormalization(x,Max,Min):
+    x = (x - Min) / (Max - Min);
+    return x;
 
 #load training raw data
 rawdata_train = pd.read_csv("4h per day(1h).csv",encoding='gbk')
@@ -59,9 +63,14 @@ for i in range(temp_dataX.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
 dataX=np.reshape(dataX,(np.array(dataX).shape[0],-1))
 dataY=np.reshape(dataY,(np.array(dataY).shape[0],-1))
 
+#Normalization
+maxV=np.max(dataY)
+minV=np.min(dataY)
+for i in range(np.array(dataY).shape[0]):
+    for j in range(np.array(dataY).shape[1]):
+        dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
 
-
-
+print (dataY)
 #build the model
 model = Sequential()
 model.add(Dense(output_dim=64, input_dim=n_frames*n_hours*n_cols))

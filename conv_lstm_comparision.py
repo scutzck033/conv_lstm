@@ -28,17 +28,22 @@ batch_size = 32
 nb_epoch = 20
 
 n_frames=4
-n_hours=24
+n_hours=4
 n_cols=1
+
+#Normalization
+def MaxMinNormalization(x,Max,Min):
+    x = (x - Min) / (Max - Min);
+    return x;
 
 
 #load training raw data
-rawdata_train = pd.read_csv("EURUSD60_train.csv",encoding='gbk')
+rawdata_train = pd.read_csv("4h per day(1h).csv",encoding='gbk')
 rawdata_train=rawdata_train[[2]] # get one column
 
 
 
-data=rawdata_train.as_matrix()
+data=rawdata_train.as_matrix()[0:160]
 
 temp_dataX= []
 temp_dataY= []
@@ -66,10 +71,18 @@ for i in range(temp_dataY.shape[0]-n_frames*n_hours*1+n_hours*1):
             temp.append(temp_dataY[i+j*n_hours])
         dataY.append(temp)
 
+#Normalization
+maxV=np.max(dataY)
+minV=np.min(dataY)
+for i in range(np.array(dataY).shape[0]):
+    for j in range(np.array(dataY).shape[1]):
+        dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
+
 
 
 dataX=np.reshape(dataX,(np.array(dataX).shape[0],n_frames,n_hours,n_cols,1))
 dataY=np.reshape(dataY,(np.array(dataY).shape[0],n_frames,-1))
+
 
 
 
