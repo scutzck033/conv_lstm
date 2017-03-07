@@ -10,7 +10,7 @@ from keras.models import model_from_json
 
 def model_mlp_4241_test(rawdata):
     rawdata_test = rawdata[[2]]
-    dataTest = rawdata_test.as_matrix()[160:244]
+    dataTest = rawdata_test.as_matrix()[160:244]#[0:888]
 
     temp_dataX_Test = []
     temp_dataY_Test = []
@@ -44,6 +44,7 @@ def model_mlp_4241_test(rawdata):
     print('Predict...')
 
     temp = 0.0
+    print (dataY_Test)
 
     for i in range(prediction.shape[0]):
         for j in range(prediction.shape[1]):
@@ -86,8 +87,8 @@ def model_merge_test(rawdata):
     dataX_Test2 = np.reshape(dataX_Test2, (np.array(dataX_Test2).shape[0], -1))
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], -1))
 
-    model = model_from_json(open('/home/slave1/PycharmProjects/conv_lstm/branch model for merge/model_merge_architecture.json').read())
-    model.load_weights('/home/slave1/PycharmProjects/conv_lstm/branch model for merge/model_merge_weights.h5')
+    model = model_from_json(open('/home/darren/PycharmProjects/conv_lstm/branch model for merge/model_merge_architecture.json').read())
+    model.load_weights('/home/darren/PycharmProjects/conv_lstm/branch model for merge/model_merge_weights.h5')
 
     print('Score...')
     prediction = model.predict([dataX_Test,dataX_Test2], verbose=0)

@@ -17,7 +17,7 @@ from keras.models import model_from_json
 
 # Training
 batch_size = 32
-nb_epoch = 2
+nb_epoch = 20
 
 n_frames=4
 n_hours=4

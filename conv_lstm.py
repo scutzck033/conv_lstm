@@ -34,16 +34,13 @@ n_cols=4
 
 #load training raw data
 rawdata_train = pd.read_csv("EURUSD60_train.csv",encoding='gbk')
-rawdata_train=rawdata_train[[2,3,4,5]] # open,close,highest,lowest
+rawdata_train=rawdata_train[[2,3,4,5]] # open,max,min,close
 
 
-data=rawdata_train.as_matrix()
-
+data=rawdata_train.as_matrix()#[0:160]
 
 temp_dataX= []
 temp_dataY= []
-
-
 
 
 temp_dataX=data[0:(data.shape[0]-n_hours)]
