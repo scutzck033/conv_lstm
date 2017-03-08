@@ -42,11 +42,11 @@ def model_mlp_4241_test(rawdata):
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], -1))
 
     # Normalization
-    maxV = np.max(dataY_Test)
-    minV = np.min(dataY_Test)
-    for i in range(np.array(dataY_Test).shape[0]):
-        for j in range(np.array(dataY_Test).shape[1]):
-            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+    # maxV = np.max(dataY_Test)
+    # minV = np.min(dataY_Test)
+    # for i in range(np.array(dataY_Test).shape[0]):
+    #     for j in range(np.array(dataY_Test).shape[1]):
+    #         dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
 
     model = model_from_json(open('model_mlp_4241_architecture.json').read())
     model.load_weights('model_mlp_4241_weights.h5')
@@ -142,19 +142,20 @@ def model_4241_test(rawdata):
     for i in range(temp_dataX_Test.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
         if i%(n_hours*n_cols) == 0:
             dataX_Test.append(temp_dataX_Test[i:i+n_frames*n_hours*n_cols])
-    for i in range(temp_dataY_Test.shape[0] - n_frames * n_hours * 1 + n_hours * 1):
-        if i % (n_hours * 1) == 0:
-            temp = []
-            for j in range(n_frames):
-                temp.append(temp_dataY_Test[i + j * n_hours])
-            dataY_Test.append(temp)
+            dataY_Test.append(temp_dataY_Test[i:i + n_frames * n_hours * n_cols])
+    # for i in range(temp_dataY_Test.shape[0] - n_frames * n_hours * 1 + n_hours * 1):
+    #     if i % (n_hours * 1) == 0:
+    #         temp = []
+    #         for j in range(n_frames):
+    #             temp.append(temp_dataY_Test[i + j * n_hours])
+    #         dataY_Test.append(temp)
 
     # Normalization
-    maxV = np.max(dataY_Test)
-    minV = np.min(dataY_Test)
-    for i in range(np.array(dataY_Test).shape[0]):
-        for j in range(np.array(dataY_Test).shape[1]):
-            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+    # maxV = np.max(dataY_Test)
+    # minV = np.min(dataY_Test)
+    # for i in range(np.array(dataY_Test).shape[0]):
+    #     for j in range(np.array(dataY_Test).shape[1]):
+    #         dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
 
     dataX_Test=np.reshape(dataX_Test,(np.array(dataX_Test).shape[0],n_frames,n_hours,n_cols,1))
     dataY_Test=np.reshape(dataY_Test,(np.array(dataY_Test).shape[0],n_frames,-1))
@@ -165,9 +166,9 @@ def model_4241_test(rawdata):
     print ('Score...')
     prediction=model.predict(dataX_Test,verbose=0)
     print ('Predict...')
-    # print (prediction.shape)
+    print (prediction)
     print ('label...')
-    # print (dataY_Test.shape)
+    print (dataY_Test)
 
     temp = 0.0
 
@@ -210,11 +211,11 @@ def model_4244_test(rawdata):
             dataY_Test.append(temp)
 
     # Normalization
-    maxV = np.max(dataY_Test)
-    minV = np.min(dataY_Test)
-    for i in range(np.array(dataY_Test).shape[0]):
-        for j in range(np.array(dataY_Test).shape[1]):
-            dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
+    # maxV = np.max(dataY_Test)
+    # minV = np.min(dataY_Test)
+    # for i in range(np.array(dataY_Test).shape[0]):
+    #     for j in range(np.array(dataY_Test).shape[1]):
+    #         dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
 
     dataX_Test = np.reshape(dataX_Test, (np.array(dataX_Test).shape[0], n_frames, n_hours, n_cols, 1))
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], n_frames, -1))

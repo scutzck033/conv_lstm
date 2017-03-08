@@ -74,11 +74,11 @@ for i in range(temp_dataY.shape[0]-n_frames*n_hours*1+n_hours*1):
         dataY.append(temp)
 
 #Normalization
-maxV=np.max(dataY)
-minV=np.min(dataY)
-for i in range(np.array(dataY).shape[0]):
-    for j in range(np.array(dataY).shape[1]):
-        dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
+# maxV=np.max(dataY)
+# minV=np.min(dataY)
+# for i in range(np.array(dataY).shape[0]):
+#     for j in range(np.array(dataY).shape[1]):
+#         dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
 
 
 dataX=np.reshape(dataX,(np.array(dataX).shape[0],n_frames,n_hours,n_cols,1))
@@ -96,7 +96,7 @@ model.add(TimeDistributed(Flatten()))
 model.add(LSTM(output_dim=lstm_output_size, return_sequences=True))
 model.add(Dropout(.5))
 model.add(Dense(np.array(dataY).shape[2]))
-model.add(Activation('sigmoid'))
+# model.add(Activation('sigmoid'))
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 
 

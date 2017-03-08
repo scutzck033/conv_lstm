@@ -64,19 +64,20 @@ dataY= []
 for i in range(temp_dataX.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
     if i%(n_hours*n_cols) == 0:
         dataX.append(temp_dataX[i:i+n_frames*n_hours*n_cols])
-for i in range(temp_dataY.shape[0]-n_frames*n_hours*1+n_hours*1):
-    if i%(n_hours*1) == 0:
-        temp = []
-        for j in range(n_frames):
-            temp.append(temp_dataY[i+j*n_hours])
-        dataY.append(temp)
+        dataY.append(temp_dataY[i:i + n_frames * n_hours * n_cols])
+# for i in range(temp_dataY.shape[0]-n_frames*n_hours*1+n_hours*1):
+#     if i%(n_hours*1) == 0:
+#         temp = []
+#         for j in range(n_frames):
+#             temp.append(temp_dataY[i+j*n_hours])
+#         dataY.append(temp)
 
 #Normalization
-maxV=np.max(dataY)
-minV=np.min(dataY)
-for i in range(np.array(dataY).shape[0]):
-    for j in range(np.array(dataY).shape[1]):
-        dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
+# maxV=np.max(dataY)
+# minV=np.min(dataY)
+# for i in range(np.array(dataY).shape[0]):
+#     for j in range(np.array(dataY).shape[1]):
+#         dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
 
 
 
@@ -97,7 +98,7 @@ model.add(TimeDistributed(Flatten()))
 model.add(LSTM(output_dim=lstm_output_size, return_sequences=True))
 model.add(Dropout(.5))
 model.add(Dense(np.array(dataY).shape[2]))
-model.add(Activation('sigmoid'))
+# model.add(Activation('sigmoid'))
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 
 

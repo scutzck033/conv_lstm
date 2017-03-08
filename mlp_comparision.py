@@ -64,11 +64,11 @@ dataX=np.reshape(dataX,(np.array(dataX).shape[0],-1))
 dataY=np.reshape(dataY,(np.array(dataY).shape[0],-1))
 
 #Normalization
-maxV=np.max(dataY)
-minV=np.min(dataY)
-for i in range(np.array(dataY).shape[0]):
-    for j in range(np.array(dataY).shape[1]):
-        dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
+# maxV=np.max(dataY)
+# minV=np.min(dataY)
+# for i in range(np.array(dataY).shape[0]):
+#     for j in range(np.array(dataY).shape[1]):
+#         dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
 
 print (dataY)
 #build the model
@@ -76,7 +76,7 @@ model = Sequential()
 model.add(Dense(output_dim=64, input_dim=n_frames*n_hours*n_cols))
 model.add(Activation("relu"))
 model.add(Dense(output_dim=1))
-model.add(Activation("sigmoid"))
+# model.add(Activation("sigmoid"))
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 
 plot(model,to_file='model_mlp_4241.png',show_shapes=True)
