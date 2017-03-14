@@ -1,5 +1,4 @@
 #model test
-
 from __future__ import print_function
 import numpy as np
 np.random.seed(1337)  # for reproducibility
@@ -217,7 +216,6 @@ def model_4241_test(rawdata):
     # for i in range(np.array(dataY_Test).shape[0]):
     #     for j in range(np.array(dataY_Test).shape[1]):
     #         dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
-
     dataX_Test=np.reshape(dataX_Test,(np.array(dataX_Test).shape[0],n_frames,n_hours,n_cols,1))
     dataY_Test=np.reshape(dataY_Test,(np.array(dataY_Test).shape[0],n_frames,-1))
 

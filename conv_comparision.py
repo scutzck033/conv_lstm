@@ -13,7 +13,6 @@ import pandas as pd
 import h5py
 from keras.models import model_from_json
 
-
 # Convolution
 nb_row=3
 nb_col=3
