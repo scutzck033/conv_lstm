@@ -18,6 +18,9 @@ import matplotlib.pyplot as plt
 from keras import optimizers
 from keras import regularizers
 from keras.constraints import maxnorm
+import sys
+sys.path.append('../utils')
+from DataUtil import DataUtil
 
 #When using the GridSearchCV
 # solve the problem: TypeError: get_params() got an unexpected keyword argument 'deep'
@@ -42,7 +45,7 @@ lstm_output_size = 64
 
 # Training
 batch_size = 32
-nb_epoch = 5000
+nb_epoch = 10000
 
 n_frames=4
 n_hours=4
@@ -55,11 +58,12 @@ n_cols=5
 
 
 #load training raw data
-rawdata_train = pd.read_csv("../data/ShangZheng1H.csv",encoding='gbk')
-rawdata_train=rawdata_train[[2,3,4,5,6]] # open,max,min,close,volume
+rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
 
+data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint='2016/11/21',endpoint='2017/02/07',n_hours=n_hours)
+print (len)
+data = data[:,[2,3,4,5,6]]#open,max,min,close,volume
 
-data=rawdata_train.as_matrix()[0:244]
 
 temp_dataX= []
 temp_dataY= []
@@ -67,6 +71,7 @@ temp_dataY= []
 
 temp_dataX=data[0:(data.shape[0]-n_hours)]
 temp_dataY=data[n_frames*n_hours:data.shape[0]]
+
 
 
 #get close column
@@ -179,7 +184,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-plt.title("ShangZhengIndex")
+plt.title("ShangZhengIndex_NoNomorlized")
 # plt.show()
 # #
-plt.savefig("ShangZhengIndex_Trained.png")
+plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")

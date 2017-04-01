@@ -53,32 +53,40 @@
 #     print("%f (%f) with: %r" % (mean, stdev, param))
 
 
-import dateutil, pylab, random
-from pylab import *
-from datetime import datetime, timedelta
-import time
-import datetime
-
-
-today="2012/04/05"
-today=time.strptime(today,"%Y/%m/%d")                            #字符串转换成time类型
-print type(today) #查看date的类型<type 'time.struct_time'>
-today=datetime.datetime(today[0],today[1],today[2])               #time类型转换成datetime类型
-print type(today) #查看date的类型<type 'datetime.datetime'>
-
-dates = [today + timedelta(days=i) for i in range(10)]
-# values = [random.randint(1, 20) for i in range(10)]
-values = [3, 2, 8, 4, 5, 6, 7, 8, 11, 2]
-# plt.plot(dates,values)
-pylab.plot_date(dates, values, linestyle='-')
-grid(True)
-plt.xlabel("Time(day)")
-plt.ylabel("Value")
-plt.title("mlp_441")
+# import dateutil, pylab, random
+# from pylab import *
+# from datetime import datetime, timedelta
+# import time
+# import datetime
 #
-# # savefig('simple_plot.png')
 #
-show()
+# today="2012/04/05"
+# today=time.strptime(today,"%Y/%m/%d")                            #字符串转换成time类型
+# print type(today) #查看date的类型<type 'time.struct_time'>
+# today=datetime.datetime(today[0],today[1],today[2])               #time类型转换成datetime类型
+# print type(today) #查看date的类型<type 'datetime.datetime'>
+#
+# dates = [today + timedelta(days=i) for i in range(10)]
+# # values = [random.randint(1, 20) for i in range(10)]
+# values = [3, 2, 8, 4, 5, 6, 7, 8, 11, 2]
+# # plt.plot(dates,values)
+# pylab.plot_date(dates, values, linestyle='-')
+# grid(True)
+# plt.xlabel("Time(day)")
+# plt.ylabel("Value")
+# plt.title("mlp_441")
+# #
+# # # savefig('simple_plot.png')
+# #
+# show()
+import pandas as pd
+import sys
+sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
+from DataUtil import DataUtil
 
+rawdata_test = pd.read_csv("./data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
 
-
+dataTest,len = DataUtil.getData(rawdata_test,startpoint='2016/11/21',endpoint='2016/11/22',n_hours=4)
+# print (dataTest)
+print (len)
+print (dataTest[:,0])

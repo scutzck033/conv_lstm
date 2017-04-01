@@ -44,7 +44,7 @@ lstm_output_size = 64
 
 # Training
 batch_size = 32
-nb_epoch = 5000
+nb_epoch = 10000
 
 n_frames=4
 n_hours=4
@@ -57,7 +57,7 @@ def MaxMinNormalization(x,Max,Min):
 
 
 #load training raw data
-rawdata_train = pd.read_csv("../data/ShangZheng1H.csv",encoding='gbk')
+rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
 rawdata_train=rawdata_train[[5]] # close
 
 
@@ -176,7 +176,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-plt.title("ShangZhengIndex")
+plt.title("ShangZhengIndex_NoNomorlized")
 # plt.show()
 
-plt.savefig("ShangZhengIndex_Trained.png")
+plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")

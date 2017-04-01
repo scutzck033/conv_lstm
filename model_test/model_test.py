@@ -13,6 +13,9 @@ from pylab import *
 from datetime import datetime, timedelta
 import time
 import datetime
+import sys
+sys.path.append('../utils')
+from DataUtil import DataUtil
 
 #Normalization
 def MaxMinNormalization(x,Max,Min):
@@ -92,10 +95,12 @@ def model_conv_4244_test(rawdata):
     n_hours = 4
     n_cols = 5
 
-    dataTest = rawdata.as_matrix()[228:328]
-    # start point
-    dateStr = rawdata.as_matrix()[244:328][:,0]
 
+    dataTest,len1 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours)
+
+    # start point
+    dateStr,len2 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours,moving_len=n_frames)
+    dateStr = dateStr[:,0]
     dataTest=dataTest[:,[2,3,4,5,6]]
 
     temp_dataX_Test = []
@@ -139,8 +144,8 @@ def model_conv_4244_test(rawdata):
     #     for j in range(np.array(dataY_Test).shape[1]):
     #         dataY_Test[i][j] = MaxMinNormalization(dataY_Test[i][j], maxV, minV)
 
-    model = model_from_json(open('/home/darren/PycharmProjects/conv_lstm/conv_graph/model_4244_conv_architecture.json').read())
-    model.load_weights('/home/darren/PycharmProjects/conv_lstm/conv_graph/model_4244_conv_weights.h5')
+    model = model_from_json(open('../conv_graph/model_4244_conv_architecture.json').read())
+    model.load_weights('../conv_graph/model_4244_conv_weights.h5')
 
 
 
@@ -180,7 +185,7 @@ def model_conv_4244_test(rawdata):
     plt.xlabel("Date")
     plt.ylabel("Value")
     # plt.title("ShangZhengIndex")
-    # plt.show()
+    plt.show()
 
     # plt.savefig("conv_graph_445.png")
 
@@ -436,22 +441,22 @@ def model_conv_4241_test(rawdata):
 
     # plt.xlabel("Time(day)")
     # plt.ylabel("Value")
-    plt.title("ShangZhengIndex")
+    plt.title("ShangZhengIndex_NoNomorlized")
     # plt.show()
 
-    plt.savefig("ShangZhengIndex.png")
+    plt.savefig("ShangZhengIndex_NoNomorlized.png")
 
     plt.close('all')
 
 
 #load testing raw data
-rawdata_test = pd.read_csv("../data/ShangZheng1H.csv",encoding='gbk')
+rawdata_test = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
 # model_4244_test(rawdata_test)
 # model_4241_test(rawdata_test)
 # model_mlp_4241_test(rawdata_test)
 # model_merge_test(rawdata_test)
 model_conv_4244_test(rawdata_test)
-model_conv_4241_test(rawdata_test)
+# model_conv_4241_test(rawdata_test)
 
 
 
