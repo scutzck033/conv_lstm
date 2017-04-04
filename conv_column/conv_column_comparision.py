@@ -44,10 +44,10 @@ lstm_output_size = 64
 
 # Training
 batch_size = 32
-nb_epoch = 10000
+nb_epoch = 1000
 
-n_frames=4
-n_hours=4
+n_frames=12
+n_hours=1
 n_cols=1
 
 #Normalization
@@ -57,36 +57,37 @@ def MaxMinNormalization(x,Max,Min):
 
 
 #load training raw data
-rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
-rawdata_train=rawdata_train[[5]] # close
+# rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
+# rawdata_train=rawdata_train[[5]] # close
+rawdata_train = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk')
+rawdata_train=rawdata_train[[103]] # close
 
-
-data=rawdata_train.as_matrix()[0:244]
+data=rawdata_train.as_matrix()[0:240]
 
 temp_dataX= []
-temp_dataY= []
+# temp_dataY= []
 
 
 temp_dataX=data[0:(data.shape[0]-n_hours)]
-temp_dataY=data[n_frames*n_hours:data.shape[0]]
-
+# temp_dataY=data[n_frames*n_hours:data.shape[0]]
+dataY=data[n_frames*n_hours:data.shape[0]]
 
 temp_dataX=np.reshape(temp_dataX,-1)
-temp_dataY=np.reshape(temp_dataY,-1)
+# temp_dataY=np.reshape(temp_dataY,-1)
 
 
 
 dataX =[]
-dataY= []
+# dataY= []
 
 
 # here is for the case that input graph and output one col
 for i in range(temp_dataX.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
-    if i%(n_hours*n_cols) == 0:
+    # if i%(n_hours*n_cols) == 0:
         dataX.append(temp_dataX[i:i+n_frames*n_hours*n_cols])
-for i in range(temp_dataY.shape[0]):
-    if i%(n_hours*1)==0:
-        dataY.append(temp_dataY[i])
+# for i in range(temp_dataY.shape[0]):
+#     if i%(n_hours*1)==0:
+#         dataY.append(temp_dataY[i])
 
 #Normalization
 # maxV=np.max(dataY)
@@ -94,7 +95,6 @@ for i in range(temp_dataY.shape[0]):
 # for i in range(np.array(dataY).shape[0]):
 #     for j in range(np.array(dataY).shape[1]):
 #         dataY[i][j]=MaxMinNormalization(dataY[i][j],maxV,minV)
-
 
 
 dataX=np.reshape(dataX,(np.array(dataX).shape[0],n_frames*n_hours,n_cols,1))
@@ -108,7 +108,7 @@ print (dataY.shape)
 # def create_model(dropout_rate=0.0, weight_constraint=0):
 model = Sequential()
 model.add(Convolution2D(nb_filter, nb_row, nb_col, border_mode='same',input_shape=(np.array(dataX).shape[1],np.array(dataX).shape[2],np.array(dataX).shape[3]),W_constraint=maxnorm(2),init='normal'))
-model.add(Dropout(0.9))
+# model.add(Dropout(0.9))
 model.add(MaxPooling2D(pool_size=(pool_size, pool_size), border_mode='same'))
 model.add(Activation('relu'))
 model.add(Flatten())
@@ -168,7 +168,7 @@ for i in range(prediction.shape[0]):
 error = temp / (prediction.shape[0] * prediction.shape[1])
 print("Model_conv_column error: %.2f%%" % (error * 100))
 
-x = np.linspace(0, 1, 100)
+x = np.linspace(0, 1, 250)
 x = [n for n in range(0, prediction.shape[0])]
 plt.plot(x, prediction, label="$ConvColumnError:$" + '%.2f' % (error * 100) + '%', color="red")
 plt.plot(x, dataY, color="blue", label="$label$")
@@ -176,7 +176,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-plt.title("ShangZhengIndex_NoNomorlized")
-# plt.show()
+# plt.title("ShangZhengIndex_NoNomorlized")
+plt.show()
 
-plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")
+# plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")

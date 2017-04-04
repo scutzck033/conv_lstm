@@ -79,14 +79,37 @@
 # # # savefig('simple_plot.png')
 # #
 # show()
+# import pandas as pd
+# import sys
+# sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
+# from DataUtil import DataUtil
+#
+# rawdata_test = pd.read_csv("./data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
+#
+# dataTest,len = DataUtil.getData(rawdata_test,startpoint='2016/11/21',endpoint='2016/11/22',n_hours=4)
+# # print (dataTest)
+# print (len)
+# print (dataTest[:,0])
+
 import pandas as pd
-import sys
-sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
-from DataUtil import DataUtil
+import numpy as np
+import csv
 
-rawdata_test = pd.read_csv("./data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
+def writeCSV(rawdata,n_clos):
+    csvfile = file('../conv_lstm/data/pems_jun_2014_train.csv', 'wb')#w means write;b means document
+    writer = csv.writer(csvfile)
+    # writer.writerow(str(n) for n in range(n_clos))#writerow writes one row
 
-dataTest,len = DataUtil.getData(rawdata_test,startpoint='2016/11/21',endpoint='2016/11/22',n_hours=4)
-# print (dataTest)
-print (len)
-print (dataTest[:,0])
+    writer.writerows(rawdata)#writerows writes multiple rows
+
+    csvfile.close()
+
+rawdata_test = pd.read_csv("./data/rawdata/pems_July-2014.csv",encoding='gbk').as_matrix()
+# print (rawdata_test)
+# print (rawdata_test.shape)
+rawdata_test = np.transpose(rawdata_test)[4:rawdata_test.shape[1]]
+print (rawdata_test)
+# writeCSV(rawdata_test,rawdata_test.shape[1])
+
+rawdata_train = pd.read_csv("./data/pems_jun_2014_train.csv",encoding='gbk')
+print (rawdata_train.shape)

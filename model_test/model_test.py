@@ -91,17 +91,19 @@ def model_mlp_4241_test(rawdata):
     plt.close('all')
 
 def model_conv_4244_test(rawdata):
-    n_frames = 4
-    n_hours = 4
-    n_cols = 5
+    n_frames = 12
+    n_hours = 1
+    n_cols = 104
 
 
-    dataTest,len1 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours)
+    # dataTest,len1 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours)
+    #
+    # # start point
+    # dateStr,len2 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours,moving_len=n_frames)
+    # dateStr = dateStr[:,0]
+    # dataTest=dataTest[:,[2,3,4,5,6]]
 
-    # start point
-    dateStr,len2 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours,moving_len=n_frames)
-    dateStr = dateStr[:,0]
-    dataTest=dataTest[:,[2,3,4,5,6]]
+    dataTest = pd.read_csv("../data/pems_jun_2014_train.csv", encoding='gbk').as_matrix()[212:252]
 
     temp_dataX_Test = []
     temp_dataY_Test = []
@@ -113,7 +115,8 @@ def model_conv_4244_test(rawdata):
 
 
     # get one column
-    temp_dataY_Test = temp_dataY_Test[:, 3]
+    # temp_dataY_Test = temp_dataY_Test[:, 3]
+    dataY_Test = temp_dataY_Test[:, 103]
 
 
     temp_dataX_Test = np.reshape(temp_dataX_Test, -1)
@@ -121,16 +124,16 @@ def model_conv_4244_test(rawdata):
 
     print (temp_dataY_Test.shape)
     dataX_Test = []
-    dataY_Test = []
+    # dataY_Test = []
     dateTimeList = []
 
     for i in range(temp_dataX_Test.shape[0] - n_frames * n_hours * n_cols + n_hours * n_cols):
         if i % (n_hours * n_cols) == 0:
             dataX_Test.append(temp_dataX_Test[i:i + n_frames * n_hours * n_cols])
-    for i in range(temp_dataY_Test.shape[0]):
-        if i % (n_hours * 1) == 0:
-            dataY_Test.append(temp_dataY_Test[i])
-            dateTimeList.append(dateStr[i])
+    # for i in range(temp_dataY_Test.shape[0]):
+    #     if i % (n_hours * 1) == 0:
+    #         dataY_Test.append(temp_dataY_Test[i])
+    #         dateTimeList.append(dateStr[i])
 
 
 
@@ -167,28 +170,40 @@ def model_conv_4244_test(rawdata):
     error = temp / (prediction.shape[0] * prediction.shape[1])
     print("Model_conv_graph error: %.2f%%" % (error * 100))
 
-    dates = []
-    # dates = np.linspace(0, 1, 100)
-    for i in range(np.array(dateTimeList).shape[0]):
-        temp = time.strptime(dateTimeList[i], "%Y/%m/%d")  # 字符串转换成time类型
-        temp = datetime.datetime(temp[0], temp[1], temp[2])  # time类型转换成datetime类型
-        dates.append(temp)
+    # dates = []
+    # # dates = np.linspace(0, 1, 100)
+    # for i in range(np.array(dateTimeList).shape[0]):
+    #     temp = time.strptime(dateTimeList[i], "%Y/%m/%d")  # 字符串转换成time类型
+    #     temp = datetime.datetime(temp[0], temp[1], temp[2])  # time类型转换成datetime类型
+    #     dates.append(temp)
 
 
 
-    pylab.plot_date(dates, prediction, linestyle='-',label ="$ConvGraphError:$"+'%.2f' %(error*100)+'%',color="green")
-    pylab.plot_date(dates, dataY_Test, linestyle='-', label="$label$",color="blue")
-    # plt.plot(dates, prediction, label ="$ConvGraphError:$"+'%.2f' %(error*100)+'%',color="green")
-    # plt.plot(dates, dataY_Test, color="blue", label="$label$")
-    plt.legend()
-
-    plt.xlabel("Date")
-    plt.ylabel("Value")
-    # plt.title("ShangZhengIndex")
-    plt.show()
+    # pylab.plot_date(dates, prediction, linestyle='-',label ="$ConvGraphError:$"+'%.2f' %(error*100)+'%',color="green")
+    # pylab.plot_date(dates, dataY_Test, linestyle='-', label="$label$",color="blue")
+    # # plt.plot(dates, prediction, label ="$ConvGraphError:$"+'%.2f' %(error*100)+'%',color="green")
+    # # plt.plot(dates, dataY_Test, color="blue", label="$label$")
+    # plt.legend()
+    #
+    # plt.xlabel("Date")
+    # plt.ylabel("Value")
+    # # plt.title("ShangZhengIndex")
+    # plt.show()
 
     # plt.savefig("conv_graph_445.png")
 
+    # plt.close('all')
+
+    x = np.linspace(0, 1, 50)
+    x = [n for n in range(0, prediction.shape[0])]
+    plt.plot(x, prediction, label="$ConvGraphError:$" + '%.2f' % (error * 100) + '%', color="green")
+    plt.plot(x, dataY_Test, color="blue", label="$label$")
+    plt.legend()
+
+    plt.xlabel("Time(day)")
+    plt.ylabel("Value")
+    plt.title("TrafficFlow")
+    # plt.show()
     # plt.close('all')
 
 
@@ -365,38 +380,38 @@ def model_4244_test(rawdata):
     print("Model_4244 error: %.2f%%" % (error * 100))
 
 def model_conv_4241_test(rawdata):
-    dataTest = rawdata.as_matrix()[228:328]
+    dataTest = rawdata[212:252]
     # start point
-    dateStr = rawdata.as_matrix()[244:328][:, 0]
+    # dateStr = rawdata.as_matrix()[244:328][:, 0]
 
-    dataTest = dataTest[:,5]
+    dataTest = dataTest[:,103]
 
 
     temp_dataX_Test = []
     temp_dataY_Test = []
 
-    n_frames = 4
-    n_hours = 4
+    n_frames = 12
+    n_hours = 1
     n_cols = 1
 
     temp_dataX_Test = dataTest[0:(dataTest.shape[0] - n_hours)]
-    temp_dataY_Test = dataTest[n_frames * n_hours:dataTest.shape[0]]
+    dataY_Test = dataTest[n_frames * n_hours:dataTest.shape[0]]
 
 
     temp_dataX_Test = np.reshape(temp_dataX_Test, -1)
     temp_dataY_Test = np.reshape(temp_dataY_Test, -1)
 
     dataX_Test = []
-    dataY_Test = []
-    dateTimeList = []
+    # dataY_Test = []
+    # dateTimeList = []
 
     for i in range(temp_dataX_Test.shape[0] - n_frames * n_hours * n_cols + n_hours * n_cols):
-        if i % (n_hours * n_cols) == 0:
+        # if i % (n_hours * n_cols) == 0:
             dataX_Test.append(temp_dataX_Test[i:i + n_frames * n_hours * n_cols])
-    for i in range(temp_dataY_Test.shape[0]):
-        if i % (n_hours * 1) == 0:
-            dataY_Test.append(temp_dataY_Test[i])
-            dateTimeList.append(dateStr[i])
+    # for i in range(temp_dataY_Test.shape[0]):
+    #     if i % (n_hours * 1) == 0:
+    #         dataY_Test.append(temp_dataY_Test[i])
+    #         dateTimeList.append(dateStr[i])
 
     dataX_Test = np.reshape(dataX_Test, (np.array(dataX_Test).shape[0], n_frames * n_hours, n_cols, 1))
     dataY_Test = np.reshape(dataY_Test, (np.array(dataY_Test).shape[0], -1))
@@ -423,40 +438,51 @@ def model_conv_4241_test(rawdata):
     error = temp / (prediction.shape[0] * prediction.shape[1])
     print("Model_conv_column error: %.2f%%" % (error * 100))
 
-    dates = []
-    # dates = np.linspace(0, 1, 100)
-    for i in range(np.array(dateTimeList).shape[0]):
-        temp = time.strptime(dateTimeList[i], "%Y/%m/%d")  # 字符串转换成time类型
-        temp = datetime.datetime(temp[0], temp[1], temp[2])  # time类型转换成datetime类型
-        dates.append(temp)
-
-    pylab.plot_date(dates, prediction, linestyle='-', label="$ConvColumnError:$" + '%.2f' % (error * 100) + '%',
-                    color="red")
-    # pylab.plot_date(dates, dataY_Test, linestyle='-', label="$label$", color="blue")
-    # x = np.linspace(0, 1, 100)
-    # x = [n for n in range(0, prediction.shape[0])]
-    # plt.plot(x, prediction, label="$ConvColumnError:$"+'%.2f' %(error*100)+'%', color="red")
-    # plt.plot(x, dataY_Test, color="blue", label="$label$")
-    plt.legend()
+    # dates = []
+    # # dates = np.linspace(0, 1, 100)
+    # for i in range(np.array(dateTimeList).shape[0]):
+    #     temp = time.strptime(dateTimeList[i], "%Y/%m/%d")  # 字符串转换成time类型
+    #     temp = datetime.datetime(temp[0], temp[1], temp[2])  # time类型转换成datetime类型
+    #     dates.append(temp)
+    #
+    # pylab.plot_date(dates, prediction, linestyle='-', label="$ConvColumnError:$" + '%.2f' % (error * 100) + '%',
+    #                 color="red")
+    # # pylab.plot_date(dates, dataY_Test, linestyle='-', label="$label$", color="blue")
+    # # x = np.linspace(0, 1, 100)
+    # # x = [n for n in range(0, prediction.shape[0])]
+    # # plt.plot(x, prediction, label="$ConvColumnError:$"+'%.2f' %(error*100)+'%', color="red")
+    # # plt.plot(x, dataY_Test, color="blue", label="$label$")
+    # plt.legend()
 
     # plt.xlabel("Time(day)")
     # plt.ylabel("Value")
-    plt.title("ShangZhengIndex_NoNomorlized")
+    # plt.title("ShangZhengIndex_NoNomorlized")
     # plt.show()
 
-    plt.savefig("ShangZhengIndex_NoNomorlized.png")
+    # plt.savefig("ShangZhengIndex_NoNomorlized.png")
 
-    plt.close('all')
+    # plt.close('all')
+    x = np.linspace(0, 1, 50)
+    x = [n for n in range(0, prediction.shape[0])]
+    plt.plot(x, prediction, label="$ConvColumnError:$" + '%.2f' % (error * 100) + '%', color="red")
+    # plt.plot(x, dataY_Test, color="blue", label="$label$")
+    plt.legend()
+
+    plt.xlabel("Time(day)")
+    plt.ylabel("Value")
+    # plt.title("ShangZhengIndex_NoNomorlized")
+    # plt.show()
+    plt.savefig("TrafficFlow.png")
 
 
 #load testing raw data
-rawdata_test = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
+rawdata_test = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk').as_matrix()
 # model_4244_test(rawdata_test)
 # model_4241_test(rawdata_test)
 # model_mlp_4241_test(rawdata_test)
 # model_merge_test(rawdata_test)
 model_conv_4244_test(rawdata_test)
-# model_conv_4241_test(rawdata_test)
+model_conv_4241_test(rawdata_test)
 
 
 
