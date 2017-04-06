@@ -45,15 +45,15 @@ lstm_output_size = 64
 
 # Training
 batch_size = 32
-nb_epoch = 1000
+nb_epoch = 10000
 
 # n_frames=4
 # n_hours=4
 # n_cols=5
 
-n_frames=12
-n_hours=1
-n_cols=104
+n_frames=4
+n_hours=4
+n_cols=5
 
 #Normalization
 # def MaxMinNormalization(x,Max,Min):
@@ -62,12 +62,12 @@ n_cols=104
 
 
 #load training raw data
-# rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
-#
-# data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint='2016/11/21',endpoint='2017/02/07',n_hours=n_hours)
-# print (len)
-# data = data[:,[2,3,4,5,6]]#open,max,min,close,volume
-data = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk').as_matrix()[0:240]
+rawdata_train = pd.read_csv("../data/ShangZheng1H_DependentNomorlized.csv",encoding='gbk')
+
+data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint='2016/11/21',endpoint='2017/02/07',n_hours=n_hours)
+print (len)
+data = data[:,[2,3,4,5,6]]#open,max,min,close,volume
+# data = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk').as_matrix()[0:240]
 
 temp_dataX= []
 temp_dataY= []
@@ -79,25 +79,25 @@ temp_dataY=data[n_frames*n_hours:data.shape[0]]
 
 
 #get close column
-# temp_dataY=temp_dataY[:,3]
-dataY=temp_dataY[:,103]
+temp_dataY=temp_dataY[:,3]
+# dataY=temp_dataY[:,103]
 
 temp_dataX=np.reshape(temp_dataX,-1)
-# temp_dataY=np.reshape(temp_dataY,-1)
+temp_dataY=np.reshape(temp_dataY,-1)
 
 
 
 dataX =[]
-# dataY= []
+dataY= []
 
 
 # here is for the case that input graph and output one col
 for i in range(temp_dataX.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
     if i%(n_hours*n_cols) == 0:
         dataX.append(temp_dataX[i:i+n_frames*n_hours*n_cols])
-# for i in range(temp_dataY.shape[0]):
-#     if i%(n_hours*1)==0:
-#         dataY.append(temp_dataY[i])
+for i in range(temp_dataY.shape[0]):
+    if i%(n_hours*1)==0:
+        dataY.append(temp_dataY[i])
 print (np.array(dataX).shape)
 print (np.array(dataY).shape)
 #Normalization
@@ -140,7 +140,7 @@ model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 # model = KerasRegressor(build_fn=create_model,verbose=2,batch_size=batch_size,nb_epoch=nb_epoch)
 
 # plot
-# plot(model,to_file='model_4244_conv.png',show_shapes=True)
+plot(model,to_file='model_4244_conv.png',show_shapes=True)
 
 
 model.fit(dataX, dataY, batch_size=batch_size, nb_epoch=nb_epoch,verbose=2)
@@ -191,7 +191,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-# plt.title("ShangZhengIndex_NoNomorlized")
-plt.show()
+plt.title("ShangZhengIndex_NoNomorlized")
+# plt.show()
 # #
-# plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")
+plt.savefig("ShangZhengIndex_DependentNomorlized_Trained.png")

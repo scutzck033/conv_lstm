@@ -6,7 +6,7 @@ import csv
 
 #write processed data
 def writeCSV(rawdata):
-    csvfile = file('../conv_lstm/data/ShangZheng1H_NoNomrlized.csv', 'wb')#w means write;b means document
+    csvfile = file('../conv_lstm/data/ShangZheng1H_DependentNomorlized.csv', 'wb')#w means write;b means document
     writer = csv.writer(csvfile)
     writer.writerow(['date', 'time','open','max','min','close','volume','turnover'])#writerow writes one row
 
@@ -90,15 +90,22 @@ rawdata_train=rawdata[:,[2,3,4,5,6]]
 # for i in range(rawdata_train.shape[1]):
 #     margin_list.append(rawdata_train[:,i].max()-rawdata_train[:,i].min())
 #     min_list.append(rawdata_train[:,i].min())
+
+max_list = []
+min_list = []
+for i in range(rawdata_train.shape[1]-1):
+    max_list.append(rawdata_train[:,i].max())
+    min_list.append(rawdata_train[:,i].min())
+maxVal = max(max_list)
+minVal = min(min_list)
+
+for i in range(rawdata_train.shape[0]):
+    for j in range(rawdata_train.shape[1]-1):
+        rawdata_train[i][j]=float(rawdata_train[i][j]-minVal)/float(maxVal - minVal)
+pieces=[rawdata[:,0],rawdata[:,1],rawdata_train,rawdata[:,7]]
 #
-# for i in range(rawdata_train.shape[0]):
-#     for j in range(rawdata_train.shape[1]):
-#         rawdata_train[i][j]=float(rawdata_train[i][j]-min_list[j])/float(margin_list[j])
-# pieces=[rawdata[:,0],rawdata[:,1],rawdata_train,rawdata[:,7]]
-
-# writeCSV((np.column_stack(pieces)))
-
-# shift the Volume
-rawdata_train[:,4]=rawdata_train[:,4]/10000
+#
+# # shift the Volume
+rawdata_train[:,4]=rawdata_train[:,4]/100000
 pieces=[rawdata[:,0],rawdata[:,1],rawdata_train,rawdata[:,7]]
 writeCSV((np.column_stack(pieces)))

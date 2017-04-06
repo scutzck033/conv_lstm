@@ -19,6 +19,9 @@ import matplotlib.pyplot as plt
 from keras import optimizers
 from keras import regularizers
 from keras.constraints import maxnorm
+import sys
+sys.path.append('../utils')
+from DataUtil import DataUtil
 
 #When using the GridSearchCV
 # solve the problem: TypeError: get_params() got an unexpected keyword argument 'deep'
@@ -44,10 +47,10 @@ lstm_output_size = 64
 
 # Training
 batch_size = 32
-nb_epoch = 1000
+nb_epoch = 10000
 
-n_frames=12
-n_hours=1
+n_frames=4
+n_hours=4
 n_cols=1
 
 #Normalization
@@ -57,37 +60,36 @@ def MaxMinNormalization(x,Max,Min):
 
 
 #load training raw data
-# rawdata_train = pd.read_csv("../data/ShangZheng1H_NoNomrlized.csv",encoding='gbk')
-# rawdata_train=rawdata_train[[5]] # close
-rawdata_train = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk')
-rawdata_train=rawdata_train[[103]] # close
+rawdata_train = pd.read_csv("../data/ShangZheng1H_DependentNomorlized.csv",encoding='gbk')
+data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint='2016/11/21',endpoint='2017/02/07',n_hours=n_hours)
+data=data[:,5] # close
+# rawdata_train = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk')
+# rawdata_train=rawdata_train[[103]]
 
-data=rawdata_train.as_matrix()[0:240]
 
 temp_dataX= []
-# temp_dataY= []
+temp_dataY= []
 
 
 temp_dataX=data[0:(data.shape[0]-n_hours)]
-# temp_dataY=data[n_frames*n_hours:data.shape[0]]
-dataY=data[n_frames*n_hours:data.shape[0]]
+temp_dataY=data[n_frames*n_hours:data.shape[0]]
+# dataY=data[n_frames*n_hours:data.shape[0]]
 
 temp_dataX=np.reshape(temp_dataX,-1)
-# temp_dataY=np.reshape(temp_dataY,-1)
-
+temp_dataY=np.reshape(temp_dataY,-1)
 
 
 dataX =[]
-# dataY= []
+dataY= []
 
 
 # here is for the case that input graph and output one col
 for i in range(temp_dataX.shape[0]-n_frames*n_hours*n_cols+n_hours*n_cols):
-    # if i%(n_hours*n_cols) == 0:
+    if i%(n_hours*n_cols) == 0:
         dataX.append(temp_dataX[i:i+n_frames*n_hours*n_cols])
-# for i in range(temp_dataY.shape[0]):
-#     if i%(n_hours*1)==0:
-#         dataY.append(temp_dataY[i])
+for i in range(temp_dataY.shape[0]):
+    if i%(n_hours*1)==0:
+        dataY.append(temp_dataY[i])
 
 #Normalization
 # maxV=np.max(dataY)
@@ -176,7 +178,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-# plt.title("ShangZhengIndex_NoNomorlized")
-plt.show()
+plt.title("ShangZhengIndex_NoNomorlized")
+# plt.show()
 
-# plt.savefig("ShangZhengIndex_NoNomorlized_Trained.png")
+plt.savefig("ShangZhengIndex_DependentNomorlized_Trained.png")
