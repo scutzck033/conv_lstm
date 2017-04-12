@@ -62,11 +62,11 @@ n_cols=5
 
 
 #load training raw data
-rawdata_train = pd.read_csv("../data/ShangZheng1H_DependentNomorlized.csv",encoding='gbk')
+rawdata_train = pd.read_csv("../data/ShangZheng1H_3Y_DependentNomorlized.csv",encoding='gbk')
 
-data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint='2016/11/21',endpoint='2017/02/07',n_hours=n_hours)
+data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint=' 2015/03/19-10:30',endpoint=' 2016/12/30-15:00',n_hours=n_hours)
 print (len)
-data = data[:,[2,3,4,5,6]]#open,max,min,close,volume
+data = data[:,[1,2,3,4,5]]#open,max,min,close,volume
 # data = pd.read_csv("../data/pems_jun_2014_train.csv",encoding='gbk').as_matrix()[0:240]
 
 temp_dataX= []
@@ -143,7 +143,7 @@ model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 plot(model,to_file='model_4244_conv.png',show_shapes=True)
 
 
-model.fit(dataX, dataY, batch_size=batch_size, nb_epoch=nb_epoch,verbose=2)
+history = model.fit(dataX, dataY, validation_split=0.1,batch_size=batch_size, nb_epoch=nb_epoch,verbose=2)
 
 # define the grid search parameters
 # weight_constraint = [1, 2, 3, 4, 5]
@@ -183,7 +183,7 @@ print("Model_conv_graph error: %.2f%%" % (error * 100))
 # #
 # #
 # #
-x = np.linspace(0, 1, 250)
+x = np.linspace(0, 1, 1800)
 x = [n for n in range(0, prediction.shape[0])]
 plt.plot(x, prediction, label="$ConvGraphError:$"+'%.2f' %(error*100)+'%', color="red")
 plt.plot(x, dataY, color="blue", label="$label$")
@@ -193,5 +193,17 @@ plt.xlabel("Time(day)")
 plt.ylabel("Value")
 plt.title("ShangZhengIndex_NoNomorlized")
 # plt.show()
-# #
+# # #
 plt.savefig("ShangZhengIndex_DependentNomorlized_Trained.png")
+plt.close("all")
+
+# summarize history for loss
+plt.plot(history.history['loss'][200:nb_epoch])
+plt.plot(history.history['val_loss'][200:nb_epoch])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'validation'], loc='upper left')
+# plt.show()
+plt.savefig("ShangZhengIndex_DependentNomorlized_TrainAndValidation_loss")
+

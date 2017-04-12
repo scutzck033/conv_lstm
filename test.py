@@ -79,37 +79,43 @@
 # # # savefig('simple_plot.png')
 # #
 # show()
-# import pandas as pd
-# import sys
-# sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
-# from DataUtil import DataUtil
-#
-# rawdata_test = pd.read_csv("./data/ShangZheng1H_NoNomrlized.csv",encoding='gbk').as_matrix()
-#
-# dataTest,len = DataUtil.getData(rawdata_test,startpoint='2016/11/21',endpoint='2016/11/22',n_hours=4)
-# # print (dataTest)
-# print (len)
-# print (dataTest[:,0])
-
 import pandas as pd
-import numpy as np
-import csv
+import sys
+sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
+from DataUtil import DataUtil
 
-def writeCSV(rawdata,n_clos):
-    csvfile = file('../conv_lstm/data/pems_jun_2014_train.csv', 'wb')#w means write;b means document
-    writer = csv.writer(csvfile)
-    # writer.writerow(str(n) for n in range(n_clos))#writerow writes one row
+rawdata_test = pd.read_csv("./data/ShangZheng1H_3Y_DependentNomorlized.csv",encoding='gbk').as_matrix()
 
-    writer.writerows(rawdata)#writerows writes multiple rows
+dataTest,len = DataUtil.getData(rawdata_test,startpoint=' 2015/03/20-10:30',endpoint=' 2015/03/24-15:00',n_hours=4)
 
-    csvfile.close()
+# if(cmp('2016/11/21-10:30','2016/11/21-10:30') == 0):
+#     print ('the same')
+# else:
+#     print ('different')
 
-rawdata_test = pd.read_csv("./data/rawdata/pems_July-2014.csv",encoding='gbk').as_matrix()
+print (dataTest)
+print (len)
+print (dataTest.shape)
+
+# import pandas as pd
+# import numpy as np
+# import csv
+#
+# def writeCSV(rawdata,n_clos):
+#     csvfile = file('../conv_lstm/data/pems_jun_2014_train.csv', 'wb')#w means write;b means document
+#     writer = csv.writer(csvfile)
+#     # writer.writerow(str(n) for n in range(n_clos))#writerow writes one row
+#
+#     writer.writerows(rawdata)#writerows writes multiple rows
+#
+#     csvfile.close()
+#
+# rawdata_test = pd.read_csv("./data/rawdata/pems_July-2014.csv",encoding='gbk').as_matrix()
+# # print (rawdata_test)
+# # print (rawdata_test.shape)
+# rawdata_test = np.transpose(rawdata_test)[4:rawdata_test.shape[1]]
 # print (rawdata_test)
-# print (rawdata_test.shape)
-rawdata_test = np.transpose(rawdata_test)[4:rawdata_test.shape[1]]
-print (rawdata_test)
-# writeCSV(rawdata_test,rawdata_test.shape[1])
-
-rawdata_train = pd.read_csv("./data/pems_jun_2014_train.csv",encoding='gbk')
-print (rawdata_train.shape)
+# # writeCSV(rawdata_test,rawdata_test.shape[1])
+#
+# rawdata_train = pd.read_csv("./data/pems_jun_2014_train.csv",encoding='gbk')
+# print (rawdata_train.shape)

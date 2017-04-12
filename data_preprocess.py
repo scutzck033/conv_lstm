@@ -6,9 +6,9 @@ import csv
 
 #write processed data
 def writeCSV(rawdata):
-    csvfile = file('../conv_lstm/data/ShangZheng1H_DependentNomorlized.csv', 'wb')#w means write;b means document
+    csvfile = file('../conv_lstm/data/ShangZheng1H_3Y_DependentNomorlized.csv', 'wb')#w means write;b means document
     writer = csv.writer(csvfile)
-    writer.writerow(['date', 'time','open','max','min','close','volume','turnover'])#writerow writes one row
+    writer.writerow(['datetime','open','max','min','close','volume'])#writerow writes one row
 
     writer.writerows(rawdata)#writerows writes multiple rows
 
@@ -38,7 +38,7 @@ def getMin(rawdata,index,scalar,column_index):
     return temp2
 
 
-# #data processed
+# #data processed -- change the time unit of the data
 def dataProcessed(rawdata,scalar):
     temp=[]
     temp_close=[]
@@ -77,12 +77,12 @@ def dataProcessed(rawdata,scalar):
 
 
 #load raw data
-rawdata = pd.read_table("../conv_lstm/data/rawdata/SH#0000015M.txt",encoding='gbk',delimiter='\t').as_matrix()
+rawdata = pd.read_table("../conv_lstm/data/rawdata/99999960M.txt",encoding='gbk',delimiter=',').as_matrix()
 
-rawdata=dataProcessed(rawdata,12) #5min per unit changed to 1h per unit
-
-rawdata_train=rawdata[:,[2,3,4,5,6]]
-
+# rawdata=dataProcessed(rawdata,12) #5min per unit changed to 1h per unit
+print (rawdata)
+rawdata_train=rawdata[:,[1,2,3,4,5]]
+# print (rawdata_train)
 
 # Normilization
 # margin_list = []
@@ -102,10 +102,8 @@ minVal = min(min_list)
 for i in range(rawdata_train.shape[0]):
     for j in range(rawdata_train.shape[1]-1):
         rawdata_train[i][j]=float(rawdata_train[i][j]-minVal)/float(maxVal - minVal)
-pieces=[rawdata[:,0],rawdata[:,1],rawdata_train,rawdata[:,7]]
-#
-#
+
 # # shift the Volume
 rawdata_train[:,4]=rawdata_train[:,4]/100000
-pieces=[rawdata[:,0],rawdata[:,1],rawdata_train,rawdata[:,7]]
+pieces=[rawdata[:,0],rawdata_train]
 writeCSV((np.column_stack(pieces)))

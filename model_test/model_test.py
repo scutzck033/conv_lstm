@@ -96,15 +96,16 @@ def model_conv_4244_test(rawdata):
     n_cols = 5
 
 
-    dataTest,len1 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours)
+    dataTest,len1 = DataUtil.getData(rawdata,startpoint=' 2017/01/03-10:30',endpoint=' 2017/03/24-15:00',n_hours=n_hours)
     #
     # # start point -- use moving_len to get the predicted starting date
-    dateStr,len2 = DataUtil.getData(rawdata,startpoint='2017/02/08',endpoint='2017/03/22',n_hours=n_hours,moving_len=n_frames)
+    dateStr,len2 = DataUtil.getData(rawdata,startpoint=' 2017/01/03-10:30',endpoint=' 2017/03/24-15:00',n_hours=n_hours,moving_len=n_frames)
     dateStr = dateStr[:,0]
-    dataTest=dataTest[:,[2,3,4,5,6]]
+
+    dataTest=dataTest[:,[1,2,3,4,5]]
 
     # dataTest = pd.read_csv("../data/pems_jun_2014_train.csv", encoding='gbk').as_matrix()[212:252]
-    print (dataTest)
+
 
 
 
@@ -174,8 +175,8 @@ def model_conv_4244_test(rawdata):
     dates = []
     # dates = np.linspace(0, 1, 100)
     for i in range(np.array(dateTimeList).shape[0]):
-        temp = time.strptime(dateTimeList[i], "%Y/%m/%d")  # 字符串转换成time类型
-        temp = datetime.datetime(temp[0], temp[1], temp[2])  # time类型转换成datetime类型
+        temp = time.strptime(dateTimeList[i], " %Y/%m/%d-%H:%M")  # 字符串转换成time类型
+        temp = datetime.datetime(temp[0], temp[1], temp[2],temp[3],temp[4])  # time类型转换成datetime类型
         dates.append(temp)
 
 
@@ -189,10 +190,10 @@ def model_conv_4244_test(rawdata):
     plt.xlabel("Date")
     plt.ylabel("Value")
     # plt.title("ShangZhengIndex")
-    # plt.show()
+    plt.show()
 
     # plt.savefig("conv_graph_445.png")
-
+    #
     # plt.close('all')
 
     # x = np.linspace(0, 1, 50)
@@ -481,13 +482,13 @@ def model_conv_4241_test(rawdata):
 
 
 #load testing raw data
-rawdata_test = pd.read_csv("../data/ShangZheng1H_DependentNomorlized.csv",encoding='gbk').as_matrix()
+rawdata_test = pd.read_csv("../data/ShangZheng1H_3Y_DependentNomorlized.csv",encoding='gbk').as_matrix()
 # model_4244_test(rawdata_test)
 # model_4241_test(rawdata_test)
 # model_mlp_4241_test(rawdata_test)
 # model_merge_test(rawdata_test)
 model_conv_4244_test(rawdata_test)
-model_conv_4241_test(rawdata_test)
+# model_conv_4241_test(rawdata_test)
 
 
 
