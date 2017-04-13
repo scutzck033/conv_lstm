@@ -6,7 +6,7 @@ import csv
 
 #write processed data
 def writeCSV(rawdata):
-    csvfile = file('../conv_lstm/data/ShangZheng1H_3Y_DependentNomorlized.csv', 'wb')#w means write;b means document
+    csvfile = file('../conv_lstm/data/szcz0411.csv', 'wb')#w means write;b means document
     writer = csv.writer(csvfile)
     writer.writerow(['datetime','open','max','min','close','volume'])#writerow writes one row
 
@@ -77,10 +77,12 @@ def dataProcessed(rawdata,scalar):
 
 
 #load raw data
-rawdata = pd.read_table("../conv_lstm/data/rawdata/99999960M.txt",encoding='gbk',delimiter=',').as_matrix()
+rawdata = pd.read_excel("../conv_lstm/data/rawdata/szcz0411.xls").as_matrix()
 
 # rawdata=dataProcessed(rawdata,12) #5min per unit changed to 1h per unit
-print (rawdata)
+
+rawdata = rawdata[3:rawdata.shape[0]-1]
+
 rawdata_train=rawdata[:,[1,2,3,4,5]]
 # print (rawdata_train)
 
