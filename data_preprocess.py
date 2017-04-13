@@ -84,6 +84,7 @@ rawdata = pd.read_excel("../conv_lstm/data/rawdata/szcz0411.xls").as_matrix()
 rawdata = rawdata[3:rawdata.shape[0]-1]
 
 rawdata_train=rawdata[:,[1,2,3,4,5]]
+
 # print (rawdata_train)
 
 # Normilization
