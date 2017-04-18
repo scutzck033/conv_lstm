@@ -84,9 +84,9 @@ import sys
 sys.path.append('/home/darren/PycharmProjects/conv_lstm/utils')
 from DataUtil import DataUtil
 
-rawdata_test = pd.read_csv("./data/ShangZheng1H_3Y_DependentNomorlized.csv",encoding='gbk').as_matrix()
+rawdata_test = pd.read_csv("./data/szcz0411.csv",encoding='gbk').as_matrix()
 
-dataTest,len = DataUtil.getData(rawdata_test,startpoint=' 2015/03/20-10:30',endpoint=' 2015/03/24-15:00',n_hours=4)
+dataTest,len = DataUtil.getData(rawdata_test,startpoint=' 2016/12/23-11:30',endpoint=' 2017/01/10-10:30',n_hours=4)
 
 # if(cmp('2016/11/21-10:30','2016/11/21-10:30') == 0):
 #     print ('the same')

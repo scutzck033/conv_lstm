@@ -1,3 +1,4 @@
+#coding:UTF-8
 import pandas as pd
 import numpy as np
 import csv
@@ -6,7 +7,7 @@ import csv
 
 #write processed data
 def writeCSV(rawdata):
-    csvfile = file('../conv_lstm/data/szcz0411.csv', 'wb')#w means write;b means document
+    csvfile = file('../conv_lstm/data/上证指数/3年数据_Volume列无归一化.csv', 'wb')#w means write;b means document
     writer = csv.writer(csvfile)
     writer.writerow(['datetime','open','max','min','close','volume'])#writerow writes one row
 
@@ -101,12 +102,19 @@ for i in range(rawdata_train.shape[1]-1):
     min_list.append(rawdata_train[:,i].min())
 maxVal = max(max_list)
 minVal = min(min_list)
+print (rawdata_train)
+print (max_list)
 
 for i in range(rawdata_train.shape[0]):
     for j in range(rawdata_train.shape[1]-1):
         rawdata_train[i][j]=float(rawdata_train[i][j]-minVal)/float(maxVal - minVal)
-
+print (rawdata_train)
 # # shift the Volume
 rawdata_train[:,4]=rawdata_train[:,4]/100000
+
+# Nomorlize the Volume indiviualy
+# rawdata_train[:,rawdata_train.shape[1]-1]=(rawdata_train[:,rawdata_train.shape[1]-1]-min(rawdata_train[:,rawdata_train.shape[1]-1]))\
+#                                         /float(max(rawdata_train[:,rawdata_train.shape[1]-1])-min(rawdata_train[:,rawdata_train.shape[1]-1]))
+
 pieces=[rawdata[:,0],rawdata_train]
-writeCSV((np.column_stack(pieces)))
+# writeCSV((np.column_stack(pieces)))
