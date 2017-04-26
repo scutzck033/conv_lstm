@@ -702,7 +702,7 @@ rawdata_test = pd.read_csv("../data/上证指数/3年数据_Volume列无归一�
 # model_merge_test(rawdata_test)
 # model_conv_4244_test(rawdata_test)
 # model_conv_4241_test(rawdata_test)
-model_lstm_oneFeature_test(rawdata_test)
+# model_lstm_oneFeature_test(rawdata_test)
 model_lstm_MultipleFeature_test(rawdata_test)
 
 

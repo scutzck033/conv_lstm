@@ -222,7 +222,7 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-plt.title("lstm_MultipleFeature")
+plt.title("MultipleFeature_match_percent is: %.2f%%" % (match_percent * 100))
 # plt.show()
 # # # #
 plt.savefig("model_lstm_MultipleFeature.png")
