@@ -181,7 +181,7 @@ model = Sequential()
 model.add(LSTM(lstm_output_size, input_shape=(n_hours*n_frames, 5)))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(dataX, dataY, nb_epoch=nb_epoch, batch_size=1, verbose=2)
+model.fit(dataX, dataY, nb_epoch=nb_epoch, batch_size=batch_size, verbose=2)
 
 
 # plot
