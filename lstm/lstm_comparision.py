@@ -120,7 +120,7 @@ BaseWrapper.get_params = custom_get_params
 
 n_frames=4
 n_hours=4
-n_cols=1
+n_cols=5
 
 # LSTM
 lstm_output_size = 4
@@ -135,7 +135,8 @@ rawdata_train = pd.read_csv("../data/上证指数/3年数据_Volume列无归一�
 
 data,len=DataUtil.getData(rawdata_train.as_matrix(),startpoint=' 2015/03/19-10:30',endpoint=' 2016/12/30-15:00',n_hours=n_hours)
 print (len)
-data = data[:,4] #close
+# data = data[:,4] #close
+data = data[:,[1,2,3,4,5]]# max,open,min,close,volume
 
 
 temp_dataX= []
@@ -144,6 +145,9 @@ temp_dataY= []
 
 temp_dataX=data[0:(data.shape[0]-n_hours)]
 temp_dataY=data[n_frames*n_hours:data.shape[0]]
+
+#get close column
+temp_dataY=temp_dataY[:,3]
 
 temp_dataX=np.reshape(temp_dataX,-1)
 temp_dataY=np.reshape(temp_dataY,-1)
@@ -161,12 +165,12 @@ for i in range(temp_dataY.shape[0]):
     if i%(n_hours*1)==0:
         dataY.append(temp_dataY[i + n_hours -1])
 
-# print (np.array(dataX).shape)
+print (np.array(dataX).shape)
 # print (np.array(dataY).shape)
 
 
 # reshape input to be [samples, time steps, features]
-dataX = numpy.reshape(dataX, (np.array(dataX).shape[0], np.array(dataX).shape[1], 1))
+dataX = numpy.reshape(dataX, (np.array(dataX).shape[0],n_hours*n_frames, n_cols))
 dataY=np.reshape(dataY,(np.array(dataY).shape[0],-1))
 
 # print (np.array(dataX).shape)
@@ -174,21 +178,21 @@ dataY=np.reshape(dataY,(np.array(dataY).shape[0],-1))
 model = Sequential()
 #a hidden layer with 'lstm_output_size' LSTM blocks or neurons
 # input_shape =(input_length,input_dim)
-model.add(LSTM(lstm_output_size, input_shape=(n_hours*n_frames, 1)))
+model.add(LSTM(lstm_output_size, input_shape=(n_hours*n_frames, 5)))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(dataX, dataY, nb_epoch=nb_epoch, batch_size=1, verbose=2)
 
 
 # plot
-plot(model,to_file='model_lstm_oneFeature.png',show_shapes=True)
+plot(model,to_file='model_lstm_MultipleFeature.png',show_shapes=True)
 
 
 
 #
 json_string = model.to_json()
-open('model_lstm_oneFeature_architecture.json','w').write(json_string)
-model.save_weights('model_lstm_oneFeature_weights.h5')
+open('model_lstm_MultipleFeature_architecture.json','w').write(json_string)
+model.save_weights('model_lstm_MultipleFeature_weights.h5')
 # # # # #
 prediction = model.predict(dataX, verbose=0)
 # print('Predict...')
@@ -218,10 +222,10 @@ plt.legend()
 
 plt.xlabel("Time(day)")
 plt.ylabel("Value")
-plt.title("lstm")
+plt.title("lstm_MultipleFeature")
 # plt.show()
 # # # #
-plt.savefig("model_lstm_oneFeature.png")
+plt.savefig("model_lstm_MultipleFeature.png")
 # plt.close("all")
 
 # # summarize history for loss
